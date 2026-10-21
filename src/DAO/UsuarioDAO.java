@@ -1,6 +1,6 @@
 package DAO;
 
-import BD.Cnx;
+import bd.Cnx;
 import modelo.Usuario;
 
 import java.sql.*;
@@ -111,6 +111,28 @@ public class UsuarioDAO implements DAO<Usuario> {
 
         }
         return lista;
+    }
+    public int contar(String condicao) {
+        String sql = "SELECT COUNT(*) FROM usuario";
+
+        if (condicao != null && !condicao.trim().isEmpty()) {
+            sql += " WHERE " + condicao;
+        }
+
+        try (Connection conexao = bd.Cnx.getConexao();
+             PreparedStatement stmt = conexao.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Erro ao executar a contagem:");
+            e.printStackTrace();
+        }
+
+        return -1;
     }
 }
 
