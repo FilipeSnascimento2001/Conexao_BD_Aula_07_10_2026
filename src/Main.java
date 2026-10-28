@@ -6,11 +6,11 @@ public class Main {
 
     public static void main(String[] dadosEntrada) {
         BD.iniciarBD();
-
-
-        SwingUtilities.invokeLater(() -> {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
             LoginControl loginControl = new LoginControl();
             loginControl.exibreJanela();
-        });
+        }});
     }
 }

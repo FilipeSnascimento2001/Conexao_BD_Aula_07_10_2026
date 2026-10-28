@@ -134,6 +134,34 @@ public class UsuarioDAO implements DAO<Usuario> {
 
         return -1;
     }
+    public Usuario autenticar(Usuario autenticacao) {
+    String sql = "SELECT id, login, senha, admin FROM usuario WHERE login = ? AND senha = ?";
+
+    try (Connection conexao = Cnx.getConexao();
+         PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+        stmt.setString(1, autenticacao.getLogin());
+        stmt.setString(2, autenticacao.getSenha());
+
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                Usuario usuario = new Usuario();
+
+                usuario.setId(rs.getInt("id"));
+                usuario.setLogin(rs.getString("login"));
+                usuario.setSenha(rs.getString("senha"));
+                usuario.setAdmin(rs.getBoolean("admin"));
+
+                return usuario;
+            }
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return null;
+}
 }
 
 
